@@ -8,11 +8,12 @@ from pydantic import BaseModel
 from google import genai
 from google.genai import types
 
-from database import get_connection
+from database import get_connection, init_database
 
 load_dotenv()
 
 app = FastAPI()
+init_database()
 
 app.add_middleware(
     CORSMiddleware,
