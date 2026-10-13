@@ -27,7 +27,7 @@ function App() {
 
     try {
       const response = await fetch(
-        'http://127.0.0.1:8000/api/analyze-lead',
+        'https://ai-lead-assistant-api.onrender.com/api/analyze-lead',
         {
           method: 'POST',
           headers: {
@@ -49,7 +49,7 @@ function App() {
 
       try {
         const leadsResponse = await fetch(
-          'http://127.0.0.1:8000/api/leads'
+          'https://ai-lead-assistant-api.onrender.com/api/leads'
         )
 
         const leadsData = await leadsResponse.json()
@@ -124,7 +124,7 @@ function App() {
 
   try {
     const response = await fetch(
-      `http://127.0.0.1:8000/api/leads/${selectedLead.id}`,
+      `https://ai-lead-assistant-api.onrender.com/api/leads/${selectedLead.id}`,
       {
         method: 'DELETE',
       }
@@ -137,7 +137,7 @@ function App() {
     }
 
     const leadsResponse = await fetch(
-      'http://127.0.0.1:8000/api/leads'
+      'https://ai-lead-assistant-api.onrender.com/api/leads'
     )
 
     const leadsData = await leadsResponse.json()
@@ -193,7 +193,7 @@ function App() {
   })
 
   useEffect(() => {
-    fetch('http://127.0.0.1:8000/api/leads')
+    fetch('https://ai-lead-assistant-api.onrender.com/api/leads')
       .then((response) => response.json())
       .then((data) => {
         setLeads(data.leads)
