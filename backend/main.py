@@ -8,7 +8,7 @@ from pydantic import BaseModel
 from google import genai
 from google.genai import types
 
-from database import get_connection, init_database
+from database import get_connection, init_database, is_postgres
 
 load_dotenv()
 
@@ -144,40 +144,65 @@ Rules:
 
     connection = get_connection()
 
-    cursor = connection.execute(
-        """
-        INSERT INTO leads (
-            customer_message,
-            lead_status,
-            priority,
-            service,
-            business_type,
-            budget,
-            timeline,
-            missing_information,
-            summary,
-            suggested_response
-        )
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        """,
-        (
-            lead.message,
-            analysis.lead_status,
-            analysis.priority,
-            analysis.service,
-            analysis.business_type,
-            analysis.budget,
-            analysis.timeline,
-            json.dumps(analysis.missing_information),
-            analysis.summary,
-            analysis.suggested_response
-        )
+    values = (
+        lead.message,
+        analysis.lead_status,
+        analysis.priority,
+        analysis.service,
+        analysis.business_type,
+        analysis.budget,
+        analysis.timeline,
+        json.dumps(analysis.missing_information),
+        analysis.summary,
+        analysis.suggested_response,
     )
 
+    if is_postgres():
+        cursor = connection.execute(
+            """
+            INSERT INTO leads (
+                customer_message,
+                lead_status,
+                priority,
+                service,
+                business_type,
+                budget,
+                timeline,
+                missing_information,
+                summary,
+                suggested_response
+            )
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            RETURNING id
+            """,
+            values,
+        )
+
+        lead_id = cursor.fetchone()["id"]
+
+    else:
+        cursor = connection.execute(
+            """
+            INSERT INTO leads (
+                customer_message,
+                lead_status,
+                priority,
+                service,
+                business_type,
+                budget,
+                timeline,
+                missing_information,
+                summary,
+                suggested_response
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            values,
+        )
+
+        lead_id = cursor.lastrowid
+
     connection.commit()
-
-    lead_id = cursor.lastrowid
-
     connection.close()
 
     return {
@@ -191,15 +216,19 @@ Rules:
 def delete_lead(lead_id: int):
     connection = get_connection()
 
-    cursor = connection.execute(
-        "DELETE FROM leads WHERE id = ?",
-        (lead_id,)
-    )
+    if is_postgres():
+        cursor = connection.execute(
+            "DELETE FROM leads WHERE id = %s",
+            (lead_id,)
+        )
+    else:
+        cursor = connection.execute(
+            "DELETE FROM leads WHERE id = ?",
+            (lead_id,)
+        )
 
     connection.commit()
-
     deleted = cursor.rowcount
-
     connection.close()
 
     if deleted == 0:
