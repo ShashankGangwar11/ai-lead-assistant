@@ -2,70 +2,83 @@
 
 A full-stack AI-powered lead qualification application that transforms customer inquiries into structured, actionable lead records using Google Gemini.
 
-**Live Demo:** https://ai-lead-assistant-beta.vercel.app/  
-**Backend API:** https://ai-lead-assistant-api.onrender.com  
-**API Documentation:** https://ai-lead-assistant-api.onrender.com/docs
+**Live Demo:** [AI Lead Assistant](https://ai-lead-assistant-beta.vercel.app/)  
+**Backend API:** [FastAPI Backend](https://ai-lead-assistant-api.onrender.com)  
+**API Documentation:** [Interactive API Docs](https://ai-lead-assistant-api.onrender.com/docs)  
+**Source Code:** [GitHub Repository](https://github.com/ShashankGangwar11/ai-lead-assistant)
 
 ## Overview
 
 AI Lead Assistant helps businesses understand incoming customer inquiries by extracting key details, qualifying leads, assigning priorities, identifying missing information, and generating suggested follow-up responses.
 
-The application includes a responsive dashboard for reviewing, searching, filtering, and managing saved leads.
+The application provides a responsive dashboard where users can review, search, filter, and manage analyzed leads.
 
 ## Key Features
 
-- AI-powered customer inquiry analysis using Google Gemini
-- Lead status and priority classification
-- Extraction of service, business type, budget, and timeline
-- Detection of missing customer information
-- AI-generated summaries and suggested responses
-- Persistent lead storage using Neon PostgreSQL in production
-- Dashboard with lead statistics
-- Search and filter leads by relevant fields
-- Individual lead details with analysis results
-- Copy suggested responses and delete leads
-- Responsive interface for desktop and mobile devices
+- **AI-powered analysis:** Analyze customer inquiries using Google Gemini.
+- **Lead qualification:** Classify leads by status and priority.
+- **Information extraction:** Identify service requirements, business type, budget, and timeline.
+- **Missing information detection:** Highlight details needed to understand a potential customer's requirements.
+- **AI-generated summaries:** Turn lengthy inquiries into concise summaries.
+- **Suggested responses:** Generate draft replies for customer follow-up.
+- **Persistent data storage:** Store production leads in Neon PostgreSQL, with SQLite support for local development.
+- **Dashboard statistics:** View total leads, qualified leads, high-priority leads, and follow-up counts.
+- **Search and filters:** Find leads by business type, service, or customer message and filter by status or priority.
+- **Lead details:** Review the original inquiry and its complete AI analysis.
+- **Copy responses:** Copy suggested replies for follow-up.
+- **Lead management:** Delete leads with confirmation.
+- **Responsive interface:** Use the application on desktop and mobile devices.
 
 ## Tech Stack
 
 ### Frontend
-
 - React
 - Vite
 - JavaScript
 - CSS
 
 ### Backend
-
 - Python
 - FastAPI
-- SQLite
+- Uvicorn
 - Google Gemini API
 - `google-genai`
 - `python-dotenv`
 
+### Database
+- Neon PostgreSQL — production database
+- SQLite — local development fallback
+- `psycopg` — PostgreSQL driver
+
+### Deployment
+- Vercel — frontend hosting
+- Render — backend hosting
+- Neon — managed PostgreSQL database
+
 ## Architecture
 
-```text
-Customer Inquiry
-       |
-       v
-React Frontend
-       |
-       v
-FastAPI Backend
-       |
-       v
-Google Gemini API
-       |
-       v
-Structured Lead Analysis
-       |
-       +------> SQLite Database
-       |
-       v
-Lead Dashboard and Details
+```mermaid
+flowchart TD
+    A[Customer Inquiry] --> B[React + Vite Frontend]
+    B --> C[FastAPI Backend]
+    C --> D[Google Gemini API]
+    D --> E[Structured Lead Analysis]
+    E --> C
+    C --> F[(Neon PostgreSQL)]
+    F --> C
+    C --> G[Dashboard, Search and Lead Details]
+    G --> B
 ```
+
+### How It Works
+
+1. **Input:** The user submits a customer inquiry through the frontend.
+2. **Analysis:** The FastAPI backend sends the inquiry to Google Gemini.
+3. **Qualification:** The AI extracts lead information, assigns status and priority, identifies missing details, and generates a summary and suggested response.
+4. **Storage:** The backend saves the analysis in the configured database.
+5. **Review:** The frontend displays saved leads for searching, filtering, and follow-up.
+
+In production, the application uses Neon PostgreSQL. During local development, it can use SQLite when `DATABASE_URL` is not configured.
 
 ## What the Assistant Produces
 
@@ -75,26 +88,42 @@ Extracts the service required, business type, budget, and expected timeline from
 
 ### Lead Status and Priority
 
-Classifies the inquiry by status and assigns a priority to help decide which leads may need attention first.
+Classifies the inquiry and assigns a priority to help identify leads that may need attention first.
 
 ### Missing Information
 
-Lists details that may be useful to collect before moving forward with the lead.
+Lists additional details that may be useful before moving forward with the lead.
 
 ### Summary and Suggested Response
 
-Creates a short summary of the inquiry and drafts a response that can be copied for follow-up.
+Generates a concise summary of the inquiry and drafts a response that can be copied for customer follow-up.
+
+## Screenshots
+
+Screenshots can be added to the repository in the `screenshots/` directory.
+
+Once the actual screenshots have been added, use the following Markdown to display them:
+
+```markdown
+### Dashboard
+![AI Lead Assistant Dashboard](screenshots/dashboard.png)
+
+### Leads List
+![Lead List with Search and Filters](screenshots/leads-list.png)
+
+### Lead Details
+![AI Lead Details](screenshots/lead-details.png)
+```
 
 ## Project Structure
 
 ```text
 ai-lead-assistant/
-|
 ├── backend/
 │   ├── main.py
 │   ├── database.py
-│   └── .env                 # Create locally; not committed
-|
+│   ├── requirements.txt
+│   └── .env                 # Local environment variables; not committed
 ├── frontend/
 │   ├── public/
 │   ├── src/
@@ -104,14 +133,19 @@ ai-lead-assistant/
 │   │   └── main.jsx
 │   ├── package.json
 │   └── vite.config.js
-|
 ├── .gitignore
 └── README.md
 ```
 
-The local SQLite database (`backend/leads.db`) is created on the developer's machine and is excluded from Git.
+The local SQLite database file is generated during development and excluded from Git.
 
 ## Run Locally
+
+### Prerequisites
+
+- Python 3.10 or a compatible version
+- Node.js and npm
+- A Google Gemini API key
 
 ### 1. Clone the repository
 
@@ -120,7 +154,7 @@ git clone https://github.com/ShashankGangwar11/ai-lead-assistant.git
 cd ai-lead-assistant
 ```
 
-### 2. Create and activate a virtual environment
+### 2. Create and activate a Python virtual environment
 
 On Windows PowerShell:
 
@@ -129,43 +163,45 @@ python -m venv venv
 .\venv\Scripts\Activate.ps1
 ```
 
+If PowerShell blocks script execution, use an appropriate local execution-policy setting or activate the environment through your preferred terminal.
+
 ### 3. Install backend dependencies
 
 ```powershell
-pip install fastapi uvicorn google-genai python-dotenv
+cd backend
+pip install -r requirements.txt
 ```
 
-### 4. Configure the Gemini API
+### 4. Configure environment variables
 
-Create a file named `.env` inside the `backend` directory:
+Create a `.env` file inside the `backend/` directory:
 
 ```env
 GEMINI_API_KEY=your_gemini_api_key
 ```
 
-Do not commit your actual API key to GitHub.
+For local SQLite development, leave `DATABASE_URL` unset. To use a PostgreSQL database locally, configure `DATABASE_URL` with your own PostgreSQL connection string.
 
-### 5. Initialize the database and start the backend
+**Never commit API keys or database credentials to GitHub.**
 
-From the project root, run:
+### 5. Start the backend
+
+From the `backend/` directory, run:
 
 ```powershell
-cd backend
-python -c "from database import init_database; init_database()"
-uvicorn main:app --reload
+python -m uvicorn main:app --reload
 ```
 
-The backend runs at:
+The backend will be available at:
 
-`http://127.0.0.1:8000`
+- API: http://127.0.0.1:8000
+- Interactive API documentation: http://127.0.0.1:8000/docs
 
-Interactive API documentation:
+The application initializes its database when the backend starts.
 
-`http://127.0.0.1:8000/docs`
+### 6. Start the frontend
 
-### 6. Install and start the frontend
-
-Open a second terminal from the project root:
+Open a second terminal and navigate to the frontend directory from the repository root:
 
 ```powershell
 cd frontend
@@ -173,19 +209,20 @@ npm install
 npm run dev
 ```
 
-The frontend runs at the local URL shown by Vite, usually:
+Vite will display the local frontend URL, usually:
 
-`http://localhost:5173`
+http://localhost:5173
 
 ## Environment Variables
 
-| Variable | Description |
-|---|---|
-| `GEMINI_API_KEY` | Google Gemini API key used by the backend for inquiry analysis |
+| Variable | Purpose | Required |
+|---|---|---|
+| `GEMINI_API_KEY` | Authenticates requests to the Google Gemini API | Yes |
+| `DATABASE_URL` | PostgreSQL connection string; when configured, the backend uses PostgreSQL instead of SQLite | Only when using PostgreSQL |
 
-The API key belongs in `backend/.env`. The `.env` file and local database are excluded from Git using `.gitignore`.
+In production, configure these variables in the backend hosting service's environment settings rather than committing them to the repository.
 
-## API
+## API Endpoints
 
 ### Health Check
 
@@ -201,7 +238,7 @@ Returns a message confirming that the backend is running.
 GET /api/leads
 ```
 
-Returns saved leads from the SQLite database, ordered by newest first.
+Returns saved leads, including their AI-generated analysis, ordered by newest first.
 
 ### Analyze a Lead
 
@@ -218,7 +255,7 @@ Example request:
 }
 ```
 
-The response includes the lead ID and analysis fields such as status, priority, service, business type, budget, timeline, missing information, summary, and suggested response. The analyzed lead is saved to SQLite.
+The response includes the lead ID and analysis fields such as lead status, priority, service, business type, budget, timeline, missing information, summary, and suggested response. The analyzed lead is saved in the configured database.
 
 ### Delete a Lead
 
@@ -230,27 +267,19 @@ Deletes the specified lead from the database.
 
 ## Use Case
 
-A small business can use the app to review incoming inquiries, understand what a potential customer needs, spot missing details, and prepare a first response without manually organizing every message.
-
-## Responsive Design
-
-The dashboard includes layout adjustments for smaller screens as well as the desktop layout.
+A small business can use the application to review incoming inquiries, understand customer requirements, identify missing details, prioritize potential leads, and prepare initial responses without manually organizing every message.
 
 ## Future Improvements
 
-- Deploy the frontend and backend
-- Add editing for saved lead details
-- Add pagination for larger lead lists
-- Add email or WhatsApp follow-up integrations
-- Add user authentication and shared workspaces
-- Add automated tests and more robust API error handling
-
-## Screenshots
-
-Screenshots will be added here after the project UI is finalized.
+- Add editing for saved lead details.
+- Implement pagination for larger lead lists.
+- Integrate email or WhatsApp follow-ups.
+- Add user authentication and shared workspaces.
+- Add automated tests and strengthen API error handling.
+- Add configurable AI model fallback and retry handling.
 
 ## Author
 
 **Shashank Gangwar**
 
-Built as a portfolio project to explore AI-powered lead qualification and full-stack application development.
+Built as a portfolio project to explore AI-powered lead qualification, API integration, database persistence, and full-stack application development.
