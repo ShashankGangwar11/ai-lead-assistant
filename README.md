@@ -1,25 +1,30 @@
 # AI Lead Assistant
 
-A full-stack web application that uses Google Gemini to analyze customer inquiries and turn them into structured lead records.
+A full-stack AI-powered lead qualification application that transforms customer inquiries into structured, actionable lead records using Google Gemini.
 
-Enter a customer's message to identify the service they need, their budget and timeline, the lead's status and priority, missing information, and a suggested response. Leads are saved in SQLite so they can be reviewed later.
+**Live Demo:** https://ai-lead-assistant-beta.vercel.app/  
+**Backend API:** https://ai-lead-assistant-api.onrender.com  
+**API Documentation:** https://ai-lead-assistant-api.onrender.com/docs
 
-## Features
+## Overview
 
-- AI-powered customer inquiry analysis
-- Lead status classification: Qualified, Needs Information, or Not Qualified
-- Priority classification: High, Medium, or Low
+AI Lead Assistant helps businesses understand incoming customer inquiries by extracting key details, qualifying leads, assigning priorities, identifying missing information, and generating suggested follow-up responses.
+
+The application includes a responsive dashboard for reviewing, searching, filtering, and managing saved leads.
+
+## Key Features
+
+- AI-powered customer inquiry analysis using Google Gemini
+- Lead status and priority classification
 - Extraction of service, business type, budget, and timeline
-- Missing information detection
-- AI-generated lead summaries and suggested responses
-- SQLite storage for analyzed leads
-- Dashboard with total, qualified, high-priority, and follow-up counts
-- Search leads by business type, service, or customer message
-- Filter leads by priority and status
-- Lead details view with original inquiry and analysis
-- Copy suggested responses
-- Delete leads with confirmation
-- Responsive dashboard layout
+- Detection of missing customer information
+- AI-generated summaries and suggested responses
+- Persistent lead storage using Neon PostgreSQL in production
+- Dashboard with lead statistics
+- Search and filter leads by relevant fields
+- Individual lead details with analysis results
+- Copy suggested responses and delete leads
+- Responsive interface for desktop and mobile devices
 
 ## Tech Stack
 
