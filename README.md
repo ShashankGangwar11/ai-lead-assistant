@@ -100,19 +100,20 @@ Generates a concise summary of the inquiry and drafts a response that can be cop
 
 ## Screenshots
 
-Screenshots can be added to the repository in the `screenshots/` directory.
-
-Once the actual screenshots have been added, use the following Markdown to display them:
-
-```markdown
 ### Dashboard
+Get a quick overview of total leads, qualified leads, high-priority leads, and recent activity.
+
 ![AI Lead Assistant Dashboard](screenshots/dashboard.png)
 
-### Leads List
-![Lead List with Search and Filters](screenshots/leads-list.png)
+### Leads Management
+Search, filter, and review saved leads by priority and qualification status.
 
-### Lead Details
-![AI Lead Details](screenshots/lead-details.png)
+![AI Lead Assistant Leads List](screenshots/leads-list.png)
+
+### Lead Details & AI Analysis
+View the original customer inquiry, AI-generated lead qualification, priority, budget, timeline, missing information, summary, and suggested response.
+
+![AI Lead Assistant Lead Details](screenshots/lead-details.png)
 ```
 
 ## Project Structure
