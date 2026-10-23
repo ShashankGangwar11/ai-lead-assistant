@@ -20,6 +20,7 @@ app.add_middleware(
     allow_origins=[
     "http://localhost:5173",
     "https://ai-lead-assistant-p04y5awgq-shashank-ae03.vercel.app",
+    "https://ai-lead-assistant-beta.vercel.app",
 ],
     allow_credentials=True,
     allow_methods=["*"],
